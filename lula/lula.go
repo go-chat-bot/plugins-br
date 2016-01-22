@@ -39,6 +39,7 @@ var (
 		"Sexo é uma coisa que quase todo mundo gosta e é uma necessidade orgânica.",
 		"O dia que o mundo experimentar a boa cachaça brasileira, o uísque vai perder mercado.",
 		"A dor da escravidão é como a de cálculo renal: não adianta dizer, tem que sentir.",
+		"Se tem uma coisa que eu me orgulho, neste País, é que não tem uma viva alma mais honesta do que eu. Nem dentro da Polícia Federal, nem dentro do Ministério Público, nem dentro da igreja católica, nem dentro da igreja evangélica. Pode ter igual, mas eu duvido.",
 	}
 )
 
