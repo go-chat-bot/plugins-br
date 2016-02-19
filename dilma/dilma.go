@@ -42,6 +42,8 @@ var (
 		"Eu acredito que nós teremos uns Jogos Olímpicos que vai ter uma qualidade totalmente diferente e que vai ser capaz de deixar um legado tanto… porque geralmente as pessoas pensam: ‘Ah, o legado é só depois’. Não, vai deixar um legado antes, durante e depois.",
 		"Foi muito, houve uma procura imensa, tinham seis empresas que apresentaram suas propostas, houve um deságio de quase… Foi um pouco mais de 38%, mas eu fico em 38% para ninguém dizer: ‘Ah, ela disse que era 38′, mas não é não. É 39, 38 e qualquer coisa ou é 36. 38, eu acho que é 39, mas vou dizer 38.",
 		"Não, querido, eu acho que o meu mandato é, eu diria assim, mais firme do que essa rede. Agora, a rede, eu acho que ela tem um lado lúdico, sabe? Porque isso que as crianças gostam tanto no pavilhão. Porque, quando você está lá em cima… Eu não posso ficar aqui brincando, não é? Então… Mas você percebe direitinho como é que dá para brincar, porque se você inclinar para um lado e, imediatamente, virar para o outro, você fica balançando mesmo, você consegue equilibrar.",
+		"A 'mosquita', ela, é a 'mosquita' que põe em média 400 ovos. Se você considerar que a 'mosquita' transmite também (o vírus), que é ela que pica, que ela que provoca a contaminação das pessoas.",
+		"Nele (no livro), ele diz que nós criamos vínculos sociais e uma das coisas que mais nos une é a fofoca. Uma coisa que nos distingue, que chimpanzé não faz. Orangotango não faz.",
 	}
 )
 
