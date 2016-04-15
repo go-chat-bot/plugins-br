@@ -39,11 +39,11 @@ func cnpj(command *bot.Cmd) (string, error) {
 		return msgParametroInvalido, nil
 	}
 
-	var cpf string
+	var cnpj string
 	for i := 0; i < qtCNPJ; i++ {
-		cpf += gerarCNPJ() + " "
+		cnpj += gerarCNPJ() + " "
 	}
-	return cpf, nil
+	return cnpj, nil
 }
 
 func gerarCNPJ() string {
