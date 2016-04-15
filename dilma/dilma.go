@@ -44,6 +44,7 @@ var (
 		"Não, querido, eu acho que o meu mandato é, eu diria assim, mais firme do que essa rede. Agora, a rede, eu acho que ela tem um lado lúdico, sabe? Porque isso que as crianças gostam tanto no pavilhão. Porque, quando você está lá em cima… Eu não posso ficar aqui brincando, não é? Então… Mas você percebe direitinho como é que dá para brincar, porque se você inclinar para um lado e, imediatamente, virar para o outro, você fica balançando mesmo, você consegue equilibrar.",
 		"A 'mosquita', ela, é a 'mosquita' que põe em média 400 ovos. Se você considerar que a 'mosquita' transmite também (o vírus), que é ela que pica, que ela que provoca a contaminação das pessoas.",
 		"Nele (no livro), ele diz que nós criamos vínculos sociais e uma das coisas que mais nos une é a fofoca. Uma coisa que nos distingue, que chimpanzé não faz. Orangotango não faz.",
+		"O golpe não é só contra mim, é também contra mim, mas não é, sobretudo, contra mim.",
 	}
 )
 
