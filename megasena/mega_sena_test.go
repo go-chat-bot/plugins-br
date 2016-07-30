@@ -53,10 +53,10 @@ const (
 )
 
 func TestSortear(t *testing.T) {
-	esperado := "01 02 03 04 05 06"
-	resultado := sortear(6)
-	if resultado != esperado {
-		t.Errorf("Test failed, expected: '%s', got:  '%s'", esperado, resultado)
+	expected := "01 02 03 04 05 06"
+	got := sortear(6)
+	if got != expected {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
 	}
 }
 
@@ -66,7 +66,7 @@ func getCommandMegasena() *bot.Cmd {
 	}
 }
 
-func TestMegaSenaQuandoNaoEPassadoArgumento(t *testing.T) {
+func TestMegaSenaWhenDontPassArgument(t *testing.T) {
 	cmd := getCommandMegasena()
 	cmd.Args = []string{}
 	got, err := megasena(cmd)
@@ -79,7 +79,7 @@ func TestMegaSenaQuandoNaoEPassadoArgumento(t *testing.T) {
 	}
 }
 
-func TestMegaSenaQuandoArgumentoForGerar(t *testing.T) {
+func TestMegaSenaWhenTheArgumentIsGerar(t *testing.T) {
 	cmd := getCommandMegasena()
 	cmd.Args = []string{"gerar"}
 	got, err := megasena(cmd)
@@ -97,7 +97,7 @@ func TestMegaSenaQuandoArgumentoForGerar(t *testing.T) {
 	}
 }
 
-func TestMegaSenaQuandoArgumentoForResultado(t *testing.T) {
+func TestMegaSenaWhenTheArgumentIsResultado(t *testing.T) {
 	ts := httptest.NewServer(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintln(w, retornoJSON)
@@ -120,7 +120,7 @@ func TestMegaSenaQuandoArgumentoForResultado(t *testing.T) {
 	}
 }
 
-func TestMegaSenaQuandoArgumentoForResultadoERetornoInvalido(t *testing.T) {
+func TestMegaSenaWhenTheArgumentIsResultadoAndReturnIsInvalid(t *testing.T) {
 	ts := httptest.NewServer(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintln(w, "invalid")
