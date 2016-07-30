@@ -134,6 +134,6 @@ func TestMegaSenaQuandoArgumentoForResultadoERetornoInvalido(t *testing.T) {
 	_, err := megasena(cmd)
 
 	if err == nil {
-		t.Errorf("Error shouldn't be nil => %s", err)
+		t.Errorf("Error shouldn't be nil")
 	}
 }
