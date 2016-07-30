@@ -5,29 +5,30 @@ import (
 	"testing"
 
 	"github.com/go-chat-bot/bot"
-	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestLula(t *testing.T) {
-	Convey("Given a text", t, func() {
-		cmd := &bot.PassiveCmd{}
+func TestLulaWhenTheTextDoesNotMatchLula(t *testing.T) {
+	cmd := &bot.PassiveCmd{}
+	cmd.Raw = "My name is go-bot, I am awesome."
+	got, err := lula(cmd)
 
-		Convey("When the text does not match lula", func() {
-			cmd.Raw = "My name is go-bot, I am awesome."
-			s, err := lula(cmd)
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+	if got != "" {
+		t.Errorf("Test failed. Expected a empty return, got:  '%s'", got)
+	}
+}
 
-			So(err, ShouldBeNil)
-			So(s, ShouldEqual, "")
-		})
+func TestLulaWhenTheTextMatchLula(t *testing.T) {
+	cmd := &bot.PassiveCmd{}
+	cmd.Raw = "eu não votei na lula!"
+	got, err := lula(cmd)
 
-		Convey("When the text match lula", func() {
-			cmd.Raw = "eu não votei na lula!"
-
-			s, err := lula(cmd)
-
-			So(err, ShouldBeNil)
-			So(s, ShouldNotEqual, "")
-			So(strings.HasPrefix(s, ":lula: "), ShouldBeTrue)
-		})
-	})
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+	if !strings.HasPrefix(got, ":lula: ") {
+		t.Errorf("Test failed. Should return a Lula quote")
+	}
 }
