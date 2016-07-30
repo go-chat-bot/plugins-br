@@ -1,32 +1,34 @@
 package dilma
 
 import (
-	"github.com/go-chat-bot/bot"
-	. "github.com/smartystreets/goconvey/convey"
 	"strings"
 	"testing"
+
+	"github.com/go-chat-bot/bot"
 )
 
-func TestDilma(t *testing.T) {
-	Convey("Given a text", t, func() {
-		cmd := &bot.PassiveCmd{}
+func TestDilmaWhenTheTextDoesNotMatchDilma(t *testing.T) {
+	cmd := &bot.PassiveCmd{}
+	cmd.Raw = "My name is go-bot, I am awesome."
+	got, err := dilma(cmd)
 
-		Convey("When the text does not match dilma", func() {
-			cmd.Raw = "My name is go-bot, I am awesome."
-			s, err := dilma(cmd)
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+	if got != "" {
+		t.Errorf("Test failed. Expected a empty return, got:  '%s'", got)
+	}
+}
 
-			So(err, ShouldBeNil)
-			So(s, ShouldEqual, "")
-		})
+func TestDilmaWhenTtheTextMatchDilma(t *testing.T) {
+	cmd := &bot.PassiveCmd{}
+	cmd.Raw = "eu não votei na dilma!"
+	got, err := dilma(cmd)
 
-		Convey("When the text match dilma", func() {
-			cmd.Raw = "eu não votei na dilma!"
-
-			s, err := dilma(cmd)
-
-			So(err, ShouldBeNil)
-			So(s, ShouldNotEqual, "")
-			So(strings.HasPrefix(s, ":dilma: "), ShouldBeTrue)
-		})
-	})
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+	if !strings.HasPrefix(got, ":dilma: ") {
+		t.Errorf("Test failed. Should return a clever Dilma quote")
+	}
 }
