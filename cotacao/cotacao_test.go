@@ -2,11 +2,11 @@ package cotacao
 
 import (
 	"fmt"
-	"github.com/go-chat-bot/bot"
-	. "github.com/smartystreets/goconvey/convey"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/go-chat-bot/bot"
 )
 
 const (
@@ -27,38 +27,38 @@ const (
     }`
 )
 
-func TestCotacao(t *testing.T) {
+func TestCotacaoMustRespondWithTheDollarAndEuroCurrencyExchange(t *testing.T) {
+	cmd := &bot.Cmd{}
 
-	Convey("Ao executar o comando cotação", t, func() {
-		cmd := &bot.Cmd{}
+	ts := httptest.NewServer(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprintln(w, expectedJSON)
+		}))
+	defer ts.Close()
+	url = ts.URL
 
-		Convey("Deve responder com a cotação do dólar e euro", func() {
-			ts := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					fmt.Fprintln(w, expectedJSON)
-				}))
-			defer ts.Close()
+	got, err := cotacao(cmd)
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+	expected := "Dólar: 2.2430 (+0.36), Euro: 2.9018 (-1.21)"
+	if got != expected {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+	}
+}
 
-			url = ts.URL
+func TestCotacaoWhenWebServiceReturnsSomethingInvalidMustReturnError(t *testing.T) {
+	cmd := &bot.Cmd{}
 
-			c, err := cotacao(cmd)
+	ts := httptest.NewServer(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprintln(w, "invalid")
+		}))
+	defer ts.Close()
+	url = ts.URL
 
-			So(err, ShouldBeNil)
-			So(c, ShouldEqual, "Dólar: 2.2430 (+0.36), Euro: 2.9018 (-1.21)")
-		})
-
-		Convey("Quando o webservice retornar algo inválido deve retornar erro", func() {
-			ts := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					fmt.Fprintln(w, "invalid")
-				}))
-			defer ts.Close()
-
-			url = ts.URL
-
-			_, err := cotacao(cmd)
-
-			So(err, ShouldNotBeNil)
-		})
-	})
+	_, err := cotacao(cmd)
+	if err == nil {
+		t.Errorf("Error shouldn't be nil")
+	}
 }
