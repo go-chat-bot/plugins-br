@@ -22,7 +22,7 @@ func TestCPFWhenItPassedValidCPFForValidation(t *testing.T) {
 
 	expected := fmt.Sprintf(msgFmtCpfValido, validCPF)
 	if got != expected {
-		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
 	}
 }
 
@@ -40,7 +40,7 @@ func TestCPFWhenItPassedInvalidCPFForValidation(t *testing.T) {
 
 	expected := fmt.Sprintf(msgFmtCpfInvalido, invalidCPF)
 	if got != expected {
-		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
 	}
 }
 
@@ -91,7 +91,7 @@ func TestCPFWhenPassedInvalidParameter(t *testing.T) {
 
 	expected := fmt.Sprintf(msgFmtCpfInvalido, invalidParameter)
 	if got != expected {
-		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
 	}
 }
 
@@ -109,7 +109,7 @@ func TestCPFWhenPassedCPFWithRepeteadNumbersMustInvalidate(t *testing.T) {
 
 		expected := fmt.Sprintf(msgFmtCpfInvalido, invalidCPF)
 		if got != expected {
-			t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+			t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
 		}
 	}
 }

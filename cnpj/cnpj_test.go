@@ -21,7 +21,7 @@ func TestCNPJWhenItPassedValidCNPJForValidation(t *testing.T) {
 
 	expected := fmt.Sprintf(msgFmtCnpjValido, validCNPJ)
 	if got != expected {
-		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
 	}
 }
 
@@ -38,7 +38,7 @@ func TestCNPJWhenItPassedInvalidCNPJForValidation(t *testing.T) {
 
 	expected := fmt.Sprintf(msgFmtCnpjInvalido, invalidCNPJ)
 	if got != expected {
-		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
 	}
 }
 
@@ -89,7 +89,7 @@ func TestCNPJWhenPassedInvalidParameter(t *testing.T) {
 
 	expected := fmt.Sprintf(msgFmtCnpjInvalido, invalidParameter)
 	if got != expected {
-		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
 	}
 }
 
@@ -107,7 +107,7 @@ func TestCNPJWhenPassedCNPJWithRepeteadNumbersMustInvalidate(t *testing.T) {
 
 		expected := fmt.Sprintf(msgFmtCnpjInvalido, invalidCNPJ)
 		if got != expected {
-			t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+			t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
 		}
 	}
 }
