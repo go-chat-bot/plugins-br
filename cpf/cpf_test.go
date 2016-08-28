@@ -6,75 +6,120 @@ import (
 	"testing"
 
 	"github.com/go-chat-bot/bot"
-	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestCPF(t *testing.T) {
-	Convey("CPF", t, func() {
-		bot := &bot.Cmd{
-			Command: "cpf",
-		}
+func TestCPFWhenItPassedValidCPFForValidation(t *testing.T) {
+	validCPF := "52998224725"
 
-		Convey("Quando é passado um CPF válido para validação", func() {
-			cpfValido := "52998224725"
-			bot.Args = []string{cpfValido}
+	bot := getCommandCPF()
+	bot.Args = []string{validCPF}
 
-			got, error := cpf(bot)
+	got, err := cpf(bot)
 
-			So(error, ShouldBeNil)
-			So(got, ShouldEqual, fmt.Sprintf(msgFmtCpfValido, cpfValido))
-		})
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
 
-		Convey("Quando é passado um CPF inválido para validação", func() {
-			cpfInvalido := "52998224700"
-			bot.Args = []string{cpfInvalido}
-
-			got, error := cpf(bot)
-
-			So(error, ShouldBeNil)
-			So(got, ShouldEqual, fmt.Sprintf(msgFmtCpfInvalido, cpfInvalido))
-		})
-
-		Convey("Quando não é passado parâmetro deve gerar apenas 1 CPF", func() {
-			got, error := cpf(bot)
-
-			So(error, ShouldBeNil)
-			So(quantidadeCpfGerado(got), ShouldEqual, 1)
-			So(valid(strings.Trim(got, " ")), ShouldEqual, true)
-		})
-
-		Convey("Quando é passado uma quantidade de CPF para gerar", func() {
-			bot.Args = []string{"3"}
-
-			got, error := cpf(bot)
-
-			So(error, ShouldBeNil)
-			So(quantidadeCpfGerado(got), ShouldEqual, 3)
-		})
-
-		Convey("Quando é passado um parâmetro inválido", func() {
-			bot.Args = []string{"123"}
-
-			got, error := cpf(bot)
-
-			So(error, ShouldBeNil)
-			So(got, ShouldEqual, fmt.Sprintf(msgFmtCpfInvalido, "123"))
-		})
-
-		Convey("Quando é passado o CPF com números repetidos deve invalidar", func() {
-			for i := 0; i <= 9; i++ {
-				cpfInvalido := strings.Repeat(string(i), 11)
-
-				bot.Args = []string{cpfInvalido}
-				got, error := cpf(bot)
-
-				So(error, ShouldBeNil)
-				So(got, ShouldEqual, fmt.Sprintf(msgFmtCpfInvalido, cpfInvalido))
-			}
-		})
-	})
+	expected := fmt.Sprintf(msgFmtCpfValido, validCPF)
+	if got != expected {
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
+	}
 }
 
-func quantidadeCpfGerado(r string) int {
+func TestCPFWhenItPassedInvalidCPFForValidation(t *testing.T) {
+	invalidCPF := "52998224700"
+
+	bot := getCommandCPF()
+	bot.Args = []string{invalidCPF}
+
+	got, err := cpf(bot)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+
+	expected := fmt.Sprintf(msgFmtCpfInvalido, invalidCPF)
+	if got != expected {
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
+	}
+}
+
+func TestCPFWhenNoParameterPassedMustGenerateOnlyOneCPF(t *testing.T) {
+	bot := getCommandCPF()
+	got, err := cpf(bot)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+
+	amount := amountOfGeneratedCPF(got)
+	if amount != 1 {
+		t.Errorf("Should return only 1 CPF, but got '%d' instead", amount)
+	}
+
+	if !valid(strings.Trim(got, " ")) {
+		t.Errorf("The generated CPF should be valid.")
+	}
+}
+
+func TestCPFWhenPassedAQuantityOfCPFToGenerate(t *testing.T) {
+	bot := getCommandCPF()
+	bot.Args = []string{"3"}
+
+	got, err := cpf(bot)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+
+	amount := amountOfGeneratedCPF(got)
+	if amount != 3 {
+		t.Errorf("Should return 3 CPF, but got '%d' instead", amount)
+	}
+}
+
+func TestCPFWhenPassedInvalidParameter(t *testing.T) {
+	invalidParameter := "123"
+	bot := getCommandCPF()
+	bot.Args = []string{invalidParameter}
+
+	got, err := cpf(bot)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+
+	expected := fmt.Sprintf(msgFmtCpfInvalido, invalidParameter)
+	if got != expected {
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
+	}
+}
+
+func TestCPFWhenPassedCPFWithRepeteadNumbersMustInvalidate(t *testing.T) {
+	bot := getCommandCPF()
+	for i := 0; i <= 9; i++ {
+		invalidCPF := strings.Repeat(string(i), 11)
+
+		bot.Args = []string{invalidCPF}
+		got, err := cpf(bot)
+
+		if err != nil {
+			t.Errorf("Error should be nil => %s", err)
+		}
+
+		expected := fmt.Sprintf(msgFmtCpfInvalido, invalidCPF)
+		if got != expected {
+			t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
+		}
+	}
+}
+
+func getCommandCPF() *bot.Cmd {
+	return &bot.Cmd{
+		Command: "cpf",
+	}
+}
+
+func amountOfGeneratedCPF(r string) int {
 	return len(strings.Split(strings.Trim(r, " "), " "))
 }

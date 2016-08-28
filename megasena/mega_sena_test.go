@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/go-chat-bot/bot"
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 const (
@@ -54,67 +53,87 @@ const (
 )
 
 func TestSortear(t *testing.T) {
-	Convey("Sortear", t, func() {
-		So(sortear(6), ShouldEqual, "01 02 03 04 05 06")
-	})
+	expected := "01 02 03 04 05 06"
+	got := sortear(6)
+	if got != expected {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+	}
 }
 
-func TestMegaSena(t *testing.T) {
-	Convey("Megasena", t, func() {
+func getCommandMegasena() *bot.Cmd {
+	return &bot.Cmd{
+		Command: "megasena",
+	}
+}
 
-		cmd := &bot.Cmd{
-			Command: "megasena",
-		}
+func TestMegaSenaWhenDontPassArgument(t *testing.T) {
+	cmd := getCommandMegasena()
+	cmd.Args = []string{}
+	got, err := megasena(cmd)
 
-		Convey("Quando não é passado argumento", func() {
-			cmd.Args = []string{}
-			got, err := megasena(cmd)
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+	if got != msgOpcaoInvalida {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", msgOpcaoInvalida, got)
+	}
+}
 
-			So(err, ShouldBeNil)
-			So(got, ShouldEqual, msgOpcaoInvalida)
-		})
+func TestMegaSenaWhenTheArgumentIsGerar(t *testing.T) {
+	cmd := getCommandMegasena()
+	cmd.Args = []string{"gerar"}
+	got, err := megasena(cmd)
 
-		Convey("Quando o argumento for gerar", func() {
-			cmd.Args = []string{"gerar"}
-			got, err := megasena(cmd)
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
 
-			So(err, ShouldBeNil)
+	match, err := regexp.MatchString("(\\d{2} {1}){5}\\d{2}", got)
+	if err != nil {
+		t.Errorf("Failed match: %s", err)
+	}
+	if !match {
+		t.Errorf("Test failed, match should be true")
+	}
+}
 
-			match, err := regexp.MatchString("(\\d{2} {1}){5}\\d{2}", got)
+func TestMegaSenaWhenTheArgumentIsResultado(t *testing.T) {
+	ts := httptest.NewServer(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprintln(w, retornoJSON)
+		}))
+	defer ts.Close()
 
-			So(err, ShouldBeNil)
-			So(match, ShouldBeTrue)
-		})
+	url = ts.URL
 
-		Convey("Quando o argumento for resultado", func() {
-			ts := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					fmt.Fprintln(w, retornoJSON)
-				}))
-			defer ts.Close()
+	cmd := getCommandMegasena()
+	cmd.Args = []string{"resultado"}
+	got, err := megasena(cmd)
 
-			url = ts.URL
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
 
-			cmd.Args = []string{"resultado"}
-			got, err := megasena(cmd)
+	expected := "Sorteio 1636 de 17/09/2014: [19 26 33 35 51 52] - 0 premiado(s) R$ 0,00."
+	if got != expected {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
+	}
+}
 
-			So(err, ShouldBeNil)
-			So(got, ShouldEqual, "Sorteio 1636 de 17/09/2014: [19 26 33 35 51 52] - 0 premiado(s) R$ 0,00.")
-		})
+func TestMegaSenaWhenTheArgumentIsResultadoAndReturnIsInvalid(t *testing.T) {
+	ts := httptest.NewServer(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprintln(w, "invalid")
+		}))
+	defer ts.Close()
 
-		Convey("Quando o argumento for resultado e o retorno for inválido", func() {
-			ts := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					fmt.Fprintln(w, "invalid")
-				}))
-			defer ts.Close()
+	url = ts.URL
 
-			url = ts.URL
+	cmd := getCommandMegasena()
+	cmd.Args = []string{"resultado"}
+	_, err := megasena(cmd)
 
-			cmd.Args = []string{"resultado"}
-			_, err := megasena(cmd)
-
-			So(err, ShouldNotBeNil)
-		})
-	})
+	if err == nil {
+		t.Errorf("Error shouldn't be nil")
+	}
 }

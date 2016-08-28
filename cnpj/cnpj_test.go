@@ -6,76 +6,118 @@ import (
 	"testing"
 
 	"github.com/go-chat-bot/bot"
-	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestCNPJ(t *testing.T) {
-	Convey("CNPJ", t, func() {
-		bot := &bot.Cmd{
-			Command: "cnpj",
-		}
+func TestCNPJWhenItPassedValidCNPJForValidation(t *testing.T) {
+	validCNPJ := "99999999000191"
 
-		Convey("Quando é passado um CNPJ válido para validação", func() {
-			cnpjValido := "99999999000191"
-			bot.Args = []string{cnpjValido}
+	bot := getCommandCNPJ()
+	bot.Args = []string{validCNPJ}
+	got, err := cnpj(bot)
 
-			got, error := cnpj(bot)
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
 
-			So(error, ShouldBeNil)
-			So(got, ShouldEqual, fmt.Sprintf(msgFmtCnpjValido, cnpjValido))
-		})
-
-		Convey("Quando é passado um CNPJ inválido para validação", func() {
-			cnpjInvalido := "99999999000100"
-			bot.Args = []string{cnpjInvalido}
-
-			got, error := cnpj(bot)
-
-			So(error, ShouldBeNil)
-			So(got, ShouldEqual, fmt.Sprintf(msgFmtCnpjInvalido, cnpjInvalido))
-		})
-
-		Convey("Quando não é passado parâmetro deve gerar apenas 1 CNPJ", func() {
-			got, error := cnpj(bot)
-
-			So(error, ShouldBeNil)
-
-			So(quantidadeCnpjGerado(got), ShouldEqual, 1)
-			So(valid(strings.Trim(got, " ")), ShouldEqual, true)
-		})
-
-		Convey("Quando é passado uma quantidade de CNPJ para gerar", func() {
-			bot.Args = []string{"3"}
-
-			got, error := cnpj(bot)
-
-			So(error, ShouldBeNil)
-
-			So(quantidadeCnpjGerado(got), ShouldEqual, 3)
-		})
-
-		Convey("Quando é passado um parâmetro inválido", func() {
-			bot.Args = []string{"123"}
-
-			got, error := cnpj(bot)
-
-			So(error, ShouldBeNil)
-			So(got, ShouldEqual, fmt.Sprintf(msgFmtCnpjInvalido, "123"))
-		})
-		Convey("Quando é passado o CNPJ com números repetidos deve invalidar", func() {
-			for i := 0; i <= 9; i++ {
-				cnpjInvalido := strings.Repeat(string(i), 14)
-
-				bot.Args = []string{cnpjInvalido}
-				got, error := cnpj(bot)
-
-				So(error, ShouldBeNil)
-				So(got, ShouldEqual, fmt.Sprintf(msgFmtCnpjInvalido, cnpjInvalido))
-			}
-		})
-	})
+	expected := fmt.Sprintf(msgFmtCnpjValido, validCNPJ)
+	if got != expected {
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
+	}
 }
 
-func quantidadeCnpjGerado(r string) int {
+func TestCNPJWhenItPassedInvalidCNPJForValidation(t *testing.T) {
+	invalidCNPJ := "99999999000100"
+
+	bot := getCommandCNPJ()
+	bot.Args = []string{invalidCNPJ}
+	got, err := cnpj(bot)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+
+	expected := fmt.Sprintf(msgFmtCnpjInvalido, invalidCNPJ)
+	if got != expected {
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
+	}
+}
+
+func TestCNPJWhenNoParameterPassedMustGenerateOnlyOneCNPJ(t *testing.T) {
+	bot := getCommandCNPJ()
+	got, err := cnpj(bot)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+
+	amount := amountOfGeneratedCNPJ(got)
+	if amount != 1 {
+		t.Errorf("Should return only 1 CNPJ, but got '%d' instead", amount)
+	}
+
+	if !valid(strings.Trim(got, " ")) {
+		t.Errorf("The generated CNPJ should be valid.")
+	}
+}
+
+func TestCNPJWhenPassedAQuantityOfCNPJToGenerate(t *testing.T) {
+	bot := getCommandCNPJ()
+	bot.Args = []string{"3"}
+
+	got, err := cnpj(bot)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+
+	amount := amountOfGeneratedCNPJ(got)
+	if amount != 3 {
+		t.Errorf("Should return 3 CNPJ, but got '%d' instead", amount)
+	}
+}
+
+func TestCNPJWhenPassedInvalidParameter(t *testing.T) {
+	invalidParameter := "123"
+	bot := getCommandCNPJ()
+	bot.Args = []string{invalidParameter}
+
+	got, err := cnpj(bot)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+
+	expected := fmt.Sprintf(msgFmtCnpjInvalido, invalidParameter)
+	if got != expected {
+		t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
+	}
+}
+
+func TestCNPJWhenPassedCNPJWithRepeteadNumbersMustInvalidate(t *testing.T) {
+	bot := getCommandCNPJ()
+	for i := 0; i <= 9; i++ {
+		invalidCNPJ := strings.Repeat(string(i), 14)
+
+		bot.Args = []string{invalidCNPJ}
+		got, err := cnpj(bot)
+
+		if err != nil {
+			t.Errorf("Error should be nil => %s", err)
+		}
+
+		expected := fmt.Sprintf(msgFmtCnpjInvalido, invalidCNPJ)
+		if got != expected {
+			t.Errorf("Test failed. Expected: '%s', got:  '%s'", expected, got)
+		}
+	}
+}
+
+func getCommandCNPJ() *bot.Cmd {
+	return &bot.Cmd{
+		Command: "cnpj",
+	}
+}
+
+func amountOfGeneratedCNPJ(r string) int {
 	return len(strings.Split(strings.Trim(r, " "), " "))
 }
