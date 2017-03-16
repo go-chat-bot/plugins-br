@@ -10,14 +10,40 @@ import (
 )
 
 const (
-	expectedJSON = `{
-			"USD":{"idreg":"215806","code":"USD","codein":"BRL","name":"D\u00f3lar Comercial","high":"3.1676","pctChange":"0.688","open":"0","bid":"3.16","ask":"3.1606","timestamp":"1477076400000","low":"3.1456","notFresh":"1","varBid":"0.0216","create_date":"2016-10-22 13:10:10"},
-			"USDT":{"idreg":"215807","code":"USD","codein":"BRLT","name":"D\u00f3lar Turismo","high":"3.15","pctChange":"0.302","open":"0","bid":"3","ask":"3.32","timestamp":"1477076400000","low":"2.99","notFresh":"1","varBid":"0.01","create_date":"2016-10-22 13:10:19"},
-			"CAD":{"idreg":"215808","code":"CAD","codein":"BRL","name":"D\u00f3lar Canadense (R$)","high":"2.3862","pctChange":"-0.311","open":"2","bid":"2.3685","ask":"2.3707","timestamp":"1477076340000","low":"2.3641","notFresh":"1","varBid":"-0.0074","create_date":"2016-10-22 13:10:29"},
-			"EUR":{"idreg":"215809","code":"EUR","codein":"BRL","name":"Euro (R$)","high":"3.4433","pctChange":"0.049","open":"3","bid":"3.4362","ask":"3.4387","timestamp":"1477076340000","low":"3.4109","notFresh":"1","varBid":"0.0017","create_date":"2016-10-22 13:10:38"},
-			"GBP":{"idreg":"215810","code":"GBP","codein":"BRL","name":"Libra Esterlina (R$)","high":"3.8742","pctChange":"0.332","open":"4","bid":"3.8634","ask":"3.8668","timestamp":"1477076400000","low":"3.8273","notFresh":"1","varBid":"0.0128","create_date":"2016-10-22 13:10:48"},
-			"ARS":{"idreg":"215811","code":"ARS","codein":"BRL","name":"Peso Argentino (R$)","high":"0.2093","pctChange":"0.82","open":"0","bid":"0.2088","ask":"0.209","timestamp":"1477076340000","low":"0.2064","notFresh":"1","varBid":"0.0017","create_date":"2016-10-22 13:10:57"}
-		}`
+	expectedJSON = `
+		{"base":"BRL",
+		"date":"2017-03-15",
+		"rates":{"AUD":0.41701,
+		"BGN":0.5829,
+		"CAD":0.42592,
+		"CHF":0.31935,
+		"CNY":2.1887,
+		"CZK":8.0532,
+		"DKK":2.2156,
+		"GBP":0.25951,
+		"HKD":2.4596,
+		"HRK":2.2143,
+		"HUF":92.639,
+		"IDR":4229.4,
+		"ILS":1.1579,
+		"INR":20.787,
+		"JPY":36.292,
+		"KRW":362.8,
+		"MXN":6.1994,
+		"MYR":1.4085,
+		"NOK":2.7226,
+		"NZD":0.45531,
+		"PHP":15.912,
+		"PLN":1.2877,
+		"RON":1.3538,
+		"RUB":18.7,
+		"SEK":2.8493,
+		"SGD":0.44708,
+		"THB":11.162,
+		"TRY":1.1772,
+		"USD":0.31657,
+		"ZAR":4.1323,
+		"EUR":0.29804}}`
 )
 
 func TestCotacaoMustRespondWithTheDollarAndEuroCurrencyExchange(t *testing.T) {
@@ -34,7 +60,7 @@ func TestCotacaoMustRespondWithTheDollarAndEuroCurrencyExchange(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error should be nil => %s", err)
 	}
-	expected := "Dólar: 3.1606 (0.0216), Euro: 3.4387 (0.0017)"
+	expected := "Dólar: 3.16, Euro: 3.36, CAD: 2.35, Libra: 3.85"
 	if got != expected {
 		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, got)
 	}
