@@ -17,7 +17,7 @@ var (
 
 func gloria_a_deus(command *bot.PassiveCmd) (string, error) {
 	if re.MatchString(command.Raw) {
-		return fmt.Sprintf("Gloria a Deuxxx!"), nil
+		return "Gloria a Deuxxx!"
 	}
 	return "", nil
 }
