@@ -84,3 +84,16 @@ func TestGloriaADeusWhenTtheTextMatchGloria1(t *testing.T) {
 		t.Errorf("Test failed. Should return a clever Gloria A Deux quote")
 	}
 }
+
+func TestGloriaADeusWhenTtheTextMatchDaciolo(t *testing.T) {
+	cmd := &bot.PassiveCmd{}
+	cmd.Raw = "Foi o Daciolo!"
+	got, err := gloria_a_deus(cmd)
+
+	if err != nil {
+		t.Errorf("Error should be nil => %s", err)
+	}
+	if !strings.HasPrefix(got, "Gloria a Deuxxx!") {
+		t.Errorf("Test failed. Should return a clever Gloria A Deux quote")
+	}
+}
