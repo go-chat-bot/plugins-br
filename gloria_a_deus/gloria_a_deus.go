@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	pattern = "(?i)\\b(deus|jesus|god|gloria|glória)\\b"
+	pattern = "(?i)\\b(deus|jesus|god|gloria|glória|daciolo)\\b"
 )
 
 var (
