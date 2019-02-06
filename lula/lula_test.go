@@ -1,7 +1,6 @@
 package lula
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/go-chat-bot/bot"
@@ -28,7 +27,7 @@ func TestLulaWhenTheTextMatchLula(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error should be nil => %s", err)
 	}
-	if !strings.HasPrefix(got, ":lula: ") {
-		t.Errorf("Test failed. Should return a Lula quote")
+	if got != resp {
+		t.Errorf("Test failed. Should return %s", resp)
 	}
 }
