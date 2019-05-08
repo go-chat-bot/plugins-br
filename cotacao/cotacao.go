@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	url = "http://api.fixer.io/latest?base=BRL"
+	url = "https://api.exchangeratesapi.io/latest?base=BRL"
 )
 
 type retorno struct {
