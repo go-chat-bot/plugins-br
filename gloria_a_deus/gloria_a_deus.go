@@ -1,7 +1,6 @@
 package gloria_a_deus
 
 import (
-	"fmt"
 	"regexp"
 
 	"github.com/go-chat-bot/bot"
@@ -15,11 +14,11 @@ var (
 	re = regexp.MustCompile(pattern)
 )
 
-func gloria_a_deus(command *bot.PassiveCmd) (string, error) {
+func gloria_a_deus(command *bot.PassiveCmd) (s string, err error) {
 	if re.MatchString(command.Raw) {
-		return "Gloria a Deuxxx!"
+		s = "Gloria a Deuxxx!"
 	}
-	return "", nil
+	return
 }
 
 func init() {
