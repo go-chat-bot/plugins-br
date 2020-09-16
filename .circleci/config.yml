@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build-go1.14:
+    docker:
+      - image: circleci/golang:1.14
+    working_directory: /go/src/github.com/go-chat-bot/plugins-br
+    steps:
+      - checkout
+      - run: go get -d -t ./...
+      - run: go test ./... -race
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build-go1.14
